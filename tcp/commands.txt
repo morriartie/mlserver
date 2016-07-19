@@ -1,0 +1,6 @@
+exit
+test
+lock computer
+tell me a random number
+hi
+command list

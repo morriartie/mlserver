@@ -1,0 +1,51 @@
+#!/usr/bin/python
+import os
+import sys
+import socket
+from random import randint
+
+def Main():
+    host = 'localhost'
+    port = 5001
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind(('',port))
+
+    print("server started ("+str(socket.gethostbyname(socket.gethostname()))+")")
+    s.listen(1)
+    c, addr = s.accept()
+    print "Connection from: " + str(addr)
+    while True:
+        data = c.recv(1024)
+        if not data:
+            break
+        isCommand, outp = cmdInput(str(data))
+        if(isCommand):
+            print("server: "+outp)
+            c.send(outp)
+        else:
+            print "from connected user: " + str(data)
+            c.send("received")
+    c.close()
+
+def cmdInput(str_inputed):
+    if(str_inputed=="exit"):
+        print("server shutdown by command from client")
+        sys.exit()
+    elif(str_inputed=="test"):
+        return (True, "test command received")
+    elif(str_inputed=="lock computer"):
+        os.system("gnome-screensaver-command -l")
+        return (True, "lock command received")
+    elif(str_inputed=="tell me a random number"):
+        return (True, str(randint(0,9)))
+    elif(str_inputed=="hi"):
+        return (True, "hello")
+    elif(str_inputed=="command list"):
+        return (True, "test; lock computer; tell me a random number; hi; command list;")
+
+    else:
+        return (False, " ")
+
+if __name__ == '__main__':
+    Main()
