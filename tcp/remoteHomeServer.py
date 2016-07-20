@@ -56,7 +56,9 @@ def cmdInput(str_inputed):
     #cmd list
     elif(winner==5):
         return (True, "test; lock computer; tell me a random number; hi; command list;")
-
+    #not a command	
+    elif(winner==(-1)):
+	return(False, " ")
     else:
         return (False, " ")
 

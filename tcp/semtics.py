@@ -1,3 +1,5 @@
+accept_precision_above = 40
+
 def compareSample(sample, checklist):
 	matches = 0
 	sample = filterWords(sample)
@@ -40,4 +42,13 @@ def findWinner(sample, checklist_list):
 			last_res = res
 			winner = x
 	print("Winner: "+" ".join(checklist_list[x])+" with "+str(last_res)+"%")		
+	if(notCommandFilter(last_res)):
+		winner = (-1)	
 	return winner		
+
+def notCommandFilter(precision):
+	if(precision <= accept_precision_above):
+		return True
+	else:
+		return False
+
