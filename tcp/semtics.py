@@ -1,3 +1,5 @@
+import matplotlib.plyplot as plt
+
 accept_precision_above = 40
 
 def compareSample(sample, checklist):
@@ -34,14 +36,17 @@ def filterWords(unfiltered):
 	return filtered
 
 def findWinner(sample, checklist_list):
+	prec_res = [0 for i in range(len(checklist_list))]
 	winner = -1
 	last_res = -1
 	for x in range(len(checklist_list)):
 		res = compareSample(sample, checklist_list[x])
+		prec_res[x] = res
 		if(res>last_res):
 			last_res = res
 			winner = x
 	print("Winner: "+" ".join(checklist_list[x])+" with "+str(last_res)+"%")		
+	buildPlot(sample, checklist_list, prec_res, winner)
 	if(notCommandFilter(last_res)):
 		winner = (-1)	
 	return winner		
@@ -52,3 +57,9 @@ def notCommandFilter(precision):
 	else:
 		return False
 
+def buildPlot(inputed, checklist_list, res_collection, winner):
+	# x values = known commands
+	# y values = precision 
+	# f(x) values = precision on each command
+	# make a line where x range from 0 to number_of_commands and y equals to winner
+	
