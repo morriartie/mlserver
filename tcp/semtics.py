@@ -1,4 +1,4 @@
-import matplotlib.plyplot as plt
+import matplotlib.pyplot as plt
 
 accept_precision_above = 40
 
@@ -62,4 +62,19 @@ def buildPlot(inputed, checklist_list, res_collection, winner):
 	# y values = precision 
 	# f(x) values = precision on each command
 	# make a line where x range from 0 to number_of_commands and y equals to winner
-	
+	x = []
+	y = []
+
+	for i in range(len(checklist_list)):
+		x.append(str(i))
+
+	for j in range(len(res_collection)):
+		y.append(str(res_collection[j]))
+
+	plt.bar(x,y,label='Results')
+	plt.xlabel('Known commands')
+	plt.ylabel('Precision')
+	plt.title('Analysis')
+	plt.legend()
+	plt.show()
+
