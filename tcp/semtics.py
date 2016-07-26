@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from random import randint
+from math import sqrt
 
 accept_precision_above = 40
 plotFStoggled = False
@@ -60,44 +61,54 @@ def notCommandFilter(precision):
 		return False
 
 def buildPlot(inputed, checklist_list, res_collection, winner):
-	# x values = known commands
-	# y values = precision 
-	# f(x) values = precision on each command
-	# make a line where x range from 0 to number_of_commands and y equals to winner
+	#initialization
 	global plotFStoggled
 	randColor = buildRandomColor()
-
 	x = []
 	y = []
-
+	#fill the lists
 	for i in range(len(checklist_list)):
 		x.append(str(i))
-
 	for j in range(len(res_collection)):
 		y.append(str(res_collection[j]))
-
+	#plot bg color
+	plt.subplot(axisbg='#333333')	
+	#build plot	
 	plt.scatter(x,y,label=" ".join(inputed),color=randColor)
-	plt.axis([0,len(x),0,110])
+	plt.axis([0,len(x),-10,110])
 	plt.xlabel('Known commands')
 	plt.ylabel('Precision')
 	plt.title('Command history by precision')
 	plt.legend(loc='center left', bbox_to_anchor=(1,0.5))
+	#toggle full screen only once
 	if not(plotFStoggled):
 		mng = plt.get_current_fig_manager()
 		mng.full_screen_toggle()
 		plotFStoggled = True
+	#build lines connecting results
+	plt.plot(x,y,color=randColor,linewidth=4.0)
+	#show plot	
 	plt.draw()
 	plt.pause(0.0001)
 
 def buildRandomColor():
-	r,g,b = 10,10,10
-	avr = 0
-	while(avr<127):
+	b_lowerLimit , b_upperLimit = 159 , 255 #std:159 ~ 255
+	dog_lowerLimit , dog_upperLimit = 0.7 , 1 #std: 0.7 ~ 1
+	r,g,b = randint(0,255),randint(0,255),randint(0,255)
+	avr = (r+g+b)/3 #average (brightness)
+	std_d = sqrt((((r-avr)**2)+((g-avr)**2)+((b-avr)**2))/3) #standard deviation
+	degree_of_grey = std_d/121 # Values between 0 and 1, 0 is not gray and 1 is gray
+	#accept only visible colors
+	while((avr<b_lowerLimit or avr>b_upperLimit) and (degree_of_grey<dog_lowerLimit or degree_of_grey>b_upperLimit)):
 		r = randint(0,255) 
 		g = randint(0,255)
 		b = randint(0,255)
 		avr = (r+g+b)/3
-
+		std_d = ((r-avr)**2)+((g-avr)**2)+((b-avr)**2)
+		degree_of_grey = std_d/121
+		print("("+str(r)+","+str(g)+","+str(b)+")|avr:"+str(avr)+"|std_d:"+str(std_d)+"|dog:"+str(degree_of_grey))
+	#convert grb to hexadecimal	
 	result = '#%02x%02x%02x' % (r,g,b)
 	return result
+
 	
