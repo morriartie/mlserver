@@ -15,7 +15,7 @@ def Main():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind(('',port))
 
-    print("server started ("+str(socket.gethostbyname(socket.gethostname()))+")")
+    print("server started ("+str(sys.argv[1])+")")
     s.listen(1)
     c, addr = s.accept()
     print "Connection from: " + str(addr)

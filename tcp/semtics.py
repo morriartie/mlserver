@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
+from random import randint
 
 accept_precision_above = 40
+plotFStoggled = False
 
 def compareSample(sample, checklist):
 	matches = 0
@@ -62,6 +64,9 @@ def buildPlot(inputed, checklist_list, res_collection, winner):
 	# y values = precision 
 	# f(x) values = precision on each command
 	# make a line where x range from 0 to number_of_commands and y equals to winner
+	global plotFStoggled
+	randColor = buildRandomColor()
+
 	x = []
 	y = []
 
@@ -71,10 +76,28 @@ def buildPlot(inputed, checklist_list, res_collection, winner):
 	for j in range(len(res_collection)):
 		y.append(str(res_collection[j]))
 
-	plt.bar(x,y,label='Results')
+	plt.scatter(x,y,label=" ".join(inputed),color=randColor)
+	plt.axis([0,len(x),0,110])
 	plt.xlabel('Known commands')
 	plt.ylabel('Precision')
-	plt.title('Analysis')
-	plt.legend()
-	plt.show()
+	plt.title('Command history by precision')
+	plt.legend(loc='center left', bbox_to_anchor=(1,0.5))
+	if not(plotFStoggled):
+		mng = plt.get_current_fig_manager()
+		mng.full_screen_toggle()
+		plotFStoggled = True
+	plt.draw()
+	plt.pause(0.0001)
 
+def buildRandomColor():
+	r,g,b = 10,10,10
+	avr = 0
+	while(avr<127):
+		r = randint(0,255) 
+		g = randint(0,255)
+		b = randint(0,255)
+		avr = (r+g+b)/3
+
+	result = '#%02x%02x%02x' % (r,g,b)
+	return result
+	
